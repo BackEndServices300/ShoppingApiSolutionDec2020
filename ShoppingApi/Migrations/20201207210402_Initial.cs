@@ -26,9 +26,9 @@ namespace ShoppingApi.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
                     CategoryId = table.Column<int>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     Count = table.Column<int>(nullable: false),
                     RemovedFromInventory = table.Column<bool>(nullable: false),
                     DateAdded = table.Column<DateTime>(nullable: false)

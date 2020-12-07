@@ -1,23 +1,35 @@
-﻿using ShoppingApi.Models.Products;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using ShoppingApi.Data;
+using ShoppingApi.Models.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
 
 namespace ShoppingApi.Services
 {
     public class EfSqlProducts : ILookupProducts
     {
-        public Task<GetProductDetailsResponse> GetProductById(int id)
+        private readonly ShoppingDataContext _context;
+        private readonly IMapper _mapper;
+        private readonly MapperConfiguration _mapperConfig;
+
+        public EfSqlProducts(ShoppingDataContext context, IMapper mapper, MapperConfiguration mapperConfig)
         {
-            return Task.FromResult(new GetProductDetailsResponse
-            {
-                Id = id,
-                Name = "Some Product",
-                Category = "Bread",
-                Count = 1,
-                Price = 1.89M
-            });
+            _context = context;
+            _mapper = mapper;
+            _mapperConfig = mapperConfig;
+        }
+
+        public async Task<GetProductDetailsResponse> GetProductById(int id)
+        {
+            var response = await _context.Products
+                .Where(p => p.Id == id && p.RemovedFromInventory == false)
+                .ProjectTo<GetProductDetailsResponse>(_mapperConfig)
+                .SingleOrDefaultAsync();
+            return response;
         }
     }
 }

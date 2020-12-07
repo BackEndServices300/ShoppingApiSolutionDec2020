@@ -15,5 +15,15 @@ namespace ShoppingApi.Data
 
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>().Property(p => p.Name)
+                 .HasMaxLength(200)
+                 .IsRequired();
+
+            modelBuilder.Entity<Product>().Property(p => p.Price)
+                .HasColumnType("decimal(18,4)");
+        }
     }
 }
