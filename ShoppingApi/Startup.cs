@@ -47,6 +47,14 @@ namespace ShoppingApi
 
             services.AddSingleton<IMapper>(mapper);
             services.AddSingleton<MapperConfiguration>(mapperConfiguration);
+
+            //// this makes it so we just have those settings availble... demo coming.
+            var configForPricing = new ConfigurationForPricing();
+            //Configuration.GetSection(configForPricing.SectionName).Bind(configForPricing);
+
+            // this makes it so we can get this through IOptions<T>... 
+            services.Configure<ConfigurationForPricing>(
+                Configuration.GetSection(configForPricing.SectionName));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

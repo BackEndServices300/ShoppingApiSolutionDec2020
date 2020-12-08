@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper.QueryableExtensions;
+using Microsoft.Extensions.Options;
 
 namespace ShoppingApi.Services
 {
@@ -15,12 +16,14 @@ namespace ShoppingApi.Services
         private readonly ShoppingDataContext _context;
         private readonly IMapper _mapper;
         private readonly MapperConfiguration _mapperConfig;
+        private readonly IOptions<ConfigurationForPricing> _pricingOptions;
 
-        public EfSqlProducts(ShoppingDataContext context, IMapper mapper, MapperConfiguration mapperConfig)
+        public EfSqlProducts(ShoppingDataContext context, IMapper mapper, MapperConfiguration mapperConfig, IOptions<ConfigurationForPricing> pricingOptions)
         {
             _context = context;
             _mapper = mapper;
             _mapperConfig = mapperConfig;
+            _pricingOptions = pricingOptions;
         }
 
         public async Task<GetProductDetailsResponse> Add(PostProductRequest productToAdd)
@@ -40,7 +43,7 @@ namespace ShoppingApi.Services
                 product.Category = category;
             }
             // take the cost, apply the markup, and make that the price.
-            product.Price = productToAdd.Cost.Value * 1.10M; // TODO: We want this "configurable"
+            product.Price = productToAdd.Cost.Value * _pricingOptions.Value.Markup; // TODO: We want this "configurable"
             
             _context.Products.Add(product);
             await _context.SaveChangesAsync();

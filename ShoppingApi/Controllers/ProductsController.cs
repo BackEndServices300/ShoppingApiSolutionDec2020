@@ -23,26 +23,22 @@ namespace ShoppingApi.Controllers
         public async Task<ActionResult> AddAProduct([FromBody] PostProductRequest productToAdd)
         {
 
-           
-
-
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             } else
             {
-               
                 // Add it to the domain.
                 GetProductDetailsResponse response = await _productCommands.Add(productToAdd);
                 // return:
                 // 201 Created
                 // Location header with the URL of the new thingy.
                 // And a copy of what they would get if they followed that URL.
-                return Ok(productToAdd); // TODO: Make the for realz.
+                return CreatedAtRoute("products#getproductbyid", new { id = response.Id }, response);
             }
         }
 
-        [HttpGet("/products/{id:int}")]
+        [HttpGet("/products/{id:int}", Name ="products#getproductbyid")]
         public async Task<ActionResult> GetProductById(int id)
         {
             GetProductDetailsResponse response = await _productLookup.GetProductById(id);
