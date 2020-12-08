@@ -13,7 +13,7 @@ namespace ShoppingApi.Models.Products
         [Required]
         public string Category { get; set; }
         [Required]
-        public decimal CostBeforeMarkup { get; set; }
+        public decimal Cost { get; set; }
         [Range(1,int.MaxValue)]
         public int Count { get; set; }
 
