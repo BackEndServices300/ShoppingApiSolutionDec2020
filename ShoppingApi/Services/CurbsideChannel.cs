@@ -26,6 +26,7 @@ namespace ShoppingApi.Services
             _theChannel = Channel.CreateBounded<CurbsideChannelRequest>(options);
         }
 
+        // From the controller - tell the channel to write this to the queu.
         public async Task<bool> AddCurbside(CurbsideChannelRequest order, CancellationToken ct = default)
         {
             while (await _theChannel.Writer.WaitToWriteAsync(ct) && !ct.IsCancellationRequested)
@@ -38,11 +39,8 @@ namespace ShoppingApi.Services
             return false;
         }
 
+        // Processor async foreach's on this - over time.
         public IAsyncEnumerable<CurbsideChannelRequest> ReadAllAsync(CancellationToken ct = default) => _theChannel.Reader.ReadAllAsync(ct);
-
-        public class CurbsideChannelRequest
-        {
-            public int ReservationId { get; set; }
-        }
     }
+
 }
