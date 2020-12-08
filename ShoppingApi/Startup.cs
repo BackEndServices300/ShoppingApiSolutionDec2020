@@ -31,6 +31,7 @@ namespace ShoppingApi
         {
             services.AddControllers();
             services.AddScoped<ILookupProducts, EfSqlProducts>();
+            services.AddScoped<IProductCommands, EfSqlProducts>();
             services.AddDbContext<ShoppingDataContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("shopping"));

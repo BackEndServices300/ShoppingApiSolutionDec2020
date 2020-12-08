@@ -12,9 +12,11 @@ namespace ShoppingApi.Controllers
     {
         private readonly ILookupProducts _productLookup;
         private readonly IProductCommands _productCommands;
-        public ProductsController(ILookupProducts productLookup)
+
+        public ProductsController(ILookupProducts productLookup, IProductCommands productCommands)
         {
             _productLookup = productLookup;
+            _productCommands = productCommands;
         }
 
         [HttpPost("/products")]
