@@ -39,6 +39,7 @@ namespace ShoppingApi
             var mapperConfiguration = new MapperConfiguration(opt =>
             {
                 opt.AddProfile(new ProductsProfile());
+                
             });
 
             var mapper = mapperConfiguration.CreateMapper();
