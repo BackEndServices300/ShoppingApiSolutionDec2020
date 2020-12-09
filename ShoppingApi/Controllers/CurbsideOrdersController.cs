@@ -52,7 +52,11 @@ namespace ShoppingApi.Controllers
                     PickupDate = null,
                     Status = orderToSave.Status
                 };
-                await _channel.AddCurbside(new CurbsideChannelRequest { ReservationId = response.Id });
+                var didWrite = await _channel.AddCurbside(new CurbsideChannelRequest { ReservationId = response.Id });
+                if(!didWrite)
+                {
+                    // what to do?
+                }
                 return CreatedAtRoute("curbsideorders#getbyid", new { id = response.Id }, response);
             }
         }
