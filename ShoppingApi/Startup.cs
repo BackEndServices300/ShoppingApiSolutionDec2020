@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ShoppingApi.Data;
+using ShoppingApi.Hubs;
 using ShoppingApi.Profiles;
 using ShoppingApi.Services;
 using System;
@@ -75,6 +76,11 @@ namespace ShoppingApi
 
             services.AddSingleton<CurbsideChannel>();
             services.AddHostedService<CurbsideOrderProcessor>();
+
+            services.AddSignalR().AddJsonProtocol(options =>
+            {
+                options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,6 +99,7 @@ namespace ShoppingApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<CurbsideOrdersHub>("/curbsideorders");
             });
         }
     }
