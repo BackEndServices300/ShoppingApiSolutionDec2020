@@ -99,7 +99,7 @@ namespace ShoppingApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<CurbsideOrdersHub>("/curbsideorders");
+                endpoints.MapHub<CurbsideOrdersHub>("/curbsidehub");
             });
         }
     }
