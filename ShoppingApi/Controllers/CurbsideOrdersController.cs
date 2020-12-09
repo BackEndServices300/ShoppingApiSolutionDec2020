@@ -61,6 +61,7 @@ namespace ShoppingApi.Controllers
             }
         }
 
+        [ResponseCache(Duration = 5, Location = ResponseCacheLocation.Client)]
         [HttpGet("curbsideorders/{id:int}", Name ="curbsideorders#getbyid")]
         public async Task<ActionResult> GetById(int id)
         {
